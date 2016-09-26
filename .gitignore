@@ -92,3 +92,6 @@ ENV/
 
 .idea
 *.iml
+
+*.yaml
+*.yml
