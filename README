@@ -1,0 +1,7 @@
+Nathan's Traffic Solver
+==============================
+
+My implementation runs on Python 3, and it does have an external dependency (for YAML support). If this isn't
+to your liking, you can use JSON instead.
+
+./main.py [problem file] is the simplest way to run it.
