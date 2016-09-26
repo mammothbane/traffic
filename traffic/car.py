@@ -19,11 +19,14 @@ class Car:
         if not self.can_forward():
             return False
 
-        if self._dir == 'r':
-            self._coord[0] += 1
-        else:
-            self._coord[1] += 1
+        (x, y) = self._coord
 
+        if self._dir == 'r':
+            x += 1
+        else:
+            y += 1
+
+        self._coord = (x, y)
         return True
 
     def back(self) -> bool:
@@ -31,11 +34,14 @@ class Car:
         if not self.can_back():
             return False
 
-        if self._dir == 'r':
-            self._coord[0] -= 1
-        else:
-            self._coord[1] -= 1
+        (x, y) = self._coord
 
+        if self._dir == 'r':
+            x -= 1
+        else:
+            y -= 1
+
+        self._coord = (x, y)
         return True
 
     def can_forward(self) -> bool:
@@ -45,20 +51,18 @@ class Car:
         return self._can_move(False)
 
     def _can_move(self, fwd):
-        offset = [0, 1]
+        x, y = (0, 1)
         if dir == 'r':
-            offset = [1, 0]
+            x, y = (1, 0)
 
         if not fwd:
-            offset[0] *= -1
-            offset[1] *= -1
+            x *= -1
+            y *= -1
 
-        offset = tuple(offset)
-
-        if not self.within_bounds(self._parent._dimens, offset):
+        if not self.within_bounds(self._parent._dimens, (x, y)):
             return False
 
-        if any([car.overlaps(self.squares(offset)) for car in self._parent]):
+        if any([car.overlaps(self.squares((x, y))) for car in self._parent]):
             return False
 
         return True
