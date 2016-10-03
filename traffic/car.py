@@ -102,21 +102,13 @@ class Car:
                 yield (x, y + i)
 
     def within_bounds(self, bounds, offset=(0, 0)) -> bool:
-        x = self._coord[0] + offset[0]
-        y = self._coord[1] + offset[1]
-
         b_x = bounds[0]
         b_y = bounds[1]
 
-        if self._dir == 'r':
-            if not b_y > y >= 0:
+        for sq in self.squares(offset):
+            if not b_x > sq[0] >= 0:
                 return False
-            if not b_x > x + (self._len - 1) and x >= 0:
-                return False
-        else:
-            if not b_x > x >= 0:
-                return False
-            if not b_y > y + (self._len - 1) and y >= 0:
+            if not b_y > sq[1] >= 0:
                 return False
 
         return True

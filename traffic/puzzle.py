@@ -24,6 +24,8 @@ class Puzzle:
         players = [x for x in self if x.player]
         assert len(players) == 1
 
+        assert players[0]._coord[0] == self._exit
+
         self.check()
 
     def _load_from_file(self, file_name):
@@ -55,15 +57,6 @@ class Puzzle:
 
     def __getitem__(self, item):
         return self._cars[item]
-
-    # def can_forward(self, i):
-    #     return self._can_move(i, True)
-    #
-    # def can_back(self, i):
-    #     return self._can_move(i, False)
-    #
-    # def _can_move(self, i, fwd):
-    #     if self[i].dir ==
 
     def _simple_cpy(self):
         return {car.index: car._coord for car in self}
@@ -98,7 +91,7 @@ class Puzzle:
             assert not any([car.overlaps(other) for other in self if other is not car])
 
     def complete(self) -> bool:
-        return (0, self._exit) in self.player.squares()
+        return (self._exit, 0) in self.player.squares()
 
     def _car_in(self, coord):
         for i, car in self.items():

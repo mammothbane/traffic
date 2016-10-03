@@ -1,13 +1,13 @@
-from collections import deque
 from itertools import count
 
 
-class BFS:
+class DFS:
     def __init__(self, puzzle):
         self._puzzle = puzzle
 
-    def start(self):
-        queue = deque()
+    def start(self, limit=0):
+        queue = []
+
         seen = set()
 
         for i in count():
@@ -16,7 +16,7 @@ class BFS:
             if self._puzzle.complete():
                 self._puzzle.print()
                 print('completed in %s steps\n' % i)
-                break
+                return True
 
             for car in self._puzzle:
                 if car.can_forward():
@@ -24,7 +24,7 @@ class BFS:
                 if car.can_back():
                     queue.append(self._puzzle.with_car_back(car.index))
 
-            cars = queue.popleft()
+            cars = queue.pop()
             hs = self.hash_cars(cars)
 
             while hs in seen:
@@ -34,6 +34,8 @@ class BFS:
             seen.add(hs)
 
             self._puzzle.use_cars(cars)
+
+        return False
 
     @staticmethod
     def hash_cars(elem):
