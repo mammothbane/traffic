@@ -1,5 +1,3 @@
-from itertools import count
-
 from .dfs import DFS
 
 
@@ -9,6 +7,11 @@ class IDS:
         self._dfs = DFS(puzzle)
 
     def start(self):
-        for i in count():
+        i = 1
+
+        while True:
+            print('trying up to depth %s' % i)
             if self._dfs.start(i):
                 break
+
+            i *= 2
