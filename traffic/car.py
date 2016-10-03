@@ -95,17 +95,18 @@ class Car:
                 yield (x, y + i)
 
     def within_bounds(self, bounds, offset=(0, 0)) -> bool:
-        adjusted = (self._coord[0] + offset[0], self._coord[1] + offset[1])
+        x = self._coord[0] + offset[0]
+        y = self._coord[1] + offset[1]
 
         if self._dir == 'r':
-            if not bounds[1] > adjusted[1] >= 0:
+            if not bounds[1] > y >= 0:
                 return False
-            if not bounds[0] > adjusted[0] + self._len and adjusted[0] >= 0:
+            if not bounds[0] > x + (self._len - 1) and x >= 0:
                 return False
         else:
-            if not bounds[0] > adjusted[0] >= 0:
+            if not bounds[0] > x >= 0:
                 return False
-            if not bounds[1] > adjusted[1] + self._len and adjusted[1] >= 0:
+            if not bounds[1] > y + (self._len - 1) and y >= 0:
                 return False
 
         return True
