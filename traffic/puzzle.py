@@ -1,4 +1,4 @@
-from itertools import count
+from itertools import count, product
 
 from .car import Car
 
@@ -51,16 +51,17 @@ class Puzzle:
     def __getitem__(self, item):
         return self._cars[item]
 
+    def to_list(self):
+        return [self._car_in((i, j)) for i, j in product(range(self._dimens[0]), range(self._dimens[1]))]
+
     def items(self):
         yield from self._cars.items()
 
     def check(self):
+        """Ensure all cars are within boundaries and non-overlapping."""
         for car in self:
-            try:
-                assert car.within_bounds(self._dimens)
-            except AssertionError:
-                print(car)
-                raise
+            assert car.within_bounds(self._dimens)
+            assert not any([car.overlaps(other) for other in self if other is not car])
 
     def complete(self) -> bool:
         return (0, self._exit) in self.player.squares()
@@ -69,16 +70,21 @@ class Puzzle:
         for i, car in self.items():
             if car.overlaps([coord]):
                 return i
+        return -1
 
     def print(self) -> str:
         out = ''
-        for i in range(0, self._dimens[1]):
-            for j in range(0, self._dimens[0]):
-                car = self._car_in((j, i))
-                if car:
-                    out += str(car._idx)
+        for i in range(self._dimens[1]):
+            for j in range(self._dimens[0]):
+                car_idx = self._car_in((j, i))
+                if car_idx == -1:
+                    out += '. '
+                    continue
+
+                if self[car_idx].player:
+                    out += 'p '
                 else:
-                    out += 'x'
+                    out += str(car_idx) + ' '
             out += '\n'
 
         print(out)

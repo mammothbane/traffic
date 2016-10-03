@@ -75,9 +75,9 @@ class Car:
         """
         itr = other
         if type(other) is Car:
-            itr = other.squares
+            itr = other.squares()
 
-        for sq1, sq2 in itertools.product(self.squares, itr):
+        for sq1, sq2 in itertools.product(self.squares(), itr):
             if sq1 == sq2:
                 return True
 
