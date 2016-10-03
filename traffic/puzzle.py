@@ -1,4 +1,4 @@
-from itertools import count, product
+from itertools import count
 
 from .car import Car
 
@@ -23,7 +23,6 @@ class Puzzle:
 
         players = [x for x in self if x.player]
         assert len(players) == 1
-        self.player = players[0]
 
         self.check()
 
@@ -45,14 +44,49 @@ class Puzzle:
         self._dimens = (data['dimens']['x'], data['dimens']['y'])
         self._exit = data['exit']
 
+    @property
+    def player(self):
+        for x in self:
+            if x.player:
+                return x
+
     def __iter__(self):
         yield from self._cars.values()
 
     def __getitem__(self, item):
         return self._cars[item]
 
-    def to_list(self):
-        return [self._car_in((i, j)) for i, j in product(range(self._dimens[0]), range(self._dimens[1]))]
+    # def can_forward(self, i):
+    #     return self._can_move(i, True)
+    #
+    # def can_back(self, i):
+    #     return self._can_move(i, False)
+    #
+    # def _can_move(self, i, fwd):
+    #     if self[i].dir ==
+
+    def _simple_cpy(self):
+        return {car.index: car._coord for car in self}
+
+    def with_car_fwd(self, i):
+        cpy = self._simple_cpy()
+        if self[i]._dir == 'r':
+            cpy[i] = (cpy[i][0] + 1, cpy[i][1])
+        else:
+            cpy[i] = (cpy[i][0], cpy[i][1] + 1)
+        return cpy
+
+    def with_car_back(self, i):
+        cpy = self._simple_cpy()
+        if self[i]._dir == 'r':
+            cpy[i] = (cpy[i][0] - 1, cpy[i][1])
+        else:
+            cpy[i] = (cpy[i][0], cpy[i][1] - 1)
+        return cpy
+
+    def use_cars(self, cars):
+        for i, cp in cars.items():
+            self[i]._coord = cp
 
     def items(self):
         yield from self._cars.items()

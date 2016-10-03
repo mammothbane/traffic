@@ -14,6 +14,10 @@ class Car:
 
         assert self._dir == 'r' or self._dir == 'd'
 
+    @property
+    def index(self):
+        return self._idx
+
     def forward(self) -> bool:
         """Move the car forward, returning true if the action was successful."""
         if not self.can_forward():
@@ -52,7 +56,7 @@ class Car:
 
     def _can_move(self, fwd):
         x, y = (0, 1)
-        if dir == 'r':
+        if self._dir == 'r':
             x, y = (1, 0)
 
         if not fwd:
@@ -62,8 +66,11 @@ class Car:
         if not self.within_bounds(self._parent._dimens, (x, y)):
             return False
 
-        if any([car.overlaps(self.squares((x, y))) for car in self._parent]):
-            return False
+        for car in self._parent:
+            if car is self:
+                continue
+            if car.overlaps(self.squares((x, y))):
+                return False
 
         return True
 
@@ -84,7 +91,7 @@ class Car:
         return False
 
     def squares(self, offset=(0, 0)):
-        """Generate squares within the bounds of the car."""
+        """Generate all squares within the bounds of the car."""
         x, y = (self._coord[0] + offset[0], self._coord[1] + offset[1])
 
         if self._dir == 'r':
@@ -98,15 +105,18 @@ class Car:
         x = self._coord[0] + offset[0]
         y = self._coord[1] + offset[1]
 
+        b_x = bounds[0]
+        b_y = bounds[1]
+
         if self._dir == 'r':
-            if not bounds[1] > y >= 0:
+            if not b_y > y >= 0:
                 return False
-            if not bounds[0] > x + (self._len - 1) and x >= 0:
+            if not b_x > x + (self._len - 1) and x >= 0:
                 return False
         else:
-            if not bounds[0] > x >= 0:
+            if not b_x > x >= 0:
                 return False
-            if not bounds[1] > y + (self._len - 1) and y >= 0:
+            if not b_y > y + (self._len - 1) and y >= 0:
                 return False
 
         return True
