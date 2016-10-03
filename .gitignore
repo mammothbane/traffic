@@ -93,6 +93,3 @@ ENV/
 .idea
 *.iml
 
-*.yaml
-*.yml
-*.json
