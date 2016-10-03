@@ -10,7 +10,7 @@ class DFS:
     def start(self, limit=None):
         queue = []
 
-        cur = State(None, {}, 0)
+        cur = State(None, self._puzzle._simple_cpy(), 0)
         seen = {cur.hash()}
 
         for i in count():
@@ -25,7 +25,7 @@ class DFS:
             if cur.depth != limit:
                 for car in self._puzzle:
                     if car.can_forward():
-                        s = State(cur, self._puzzle.with_car_fwd(car.index), cur.depth + 1)
+                        s = State(cur, {car.index: car.forward}, cur.depth + 1)
                         hs = s.hash()
 
                         if hs not in seen:
@@ -33,7 +33,7 @@ class DFS:
                             seen.add(hs)
 
                     if car.can_back():
-                        s = State(cur, self._puzzle.with_car_back(car.index), cur.depth + 1)
+                        s = State(cur, {car.index: car.back}, cur.depth + 1)
                         hs = s.hash()
 
                         if hs not in seen:

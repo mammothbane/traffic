@@ -14,7 +14,7 @@ class State:
             return copy(self._checkpoint)
 
         if not self._parent:
-            return self._delta
+            return copy(self._delta)
 
         out = self._parent.total_deltas
 
@@ -36,4 +36,9 @@ class State:
 
         puzzle.use_cars(self.total_deltas)
         puzzle.print()
+        if self._parent and len(self._delta) == 1:
+            k = list(self._delta.keys())[0]
+            print('%s: %s -> %s' % (k, self._parent.total_deltas[k], self._delta[k]))
+        else:
+            print(self._delta)
         print()

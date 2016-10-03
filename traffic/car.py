@@ -18,35 +18,27 @@ class Car:
     def index(self):
         return self._idx
 
-    def forward(self) -> bool:
-        """Move the car forward, returning true if the action was successful."""
-        if not self.can_forward():
-            return False
+    @property
+    def x(self):
+        return self._coord[0]
 
-        (x, y) = self._coord
+    @property
+    def y(self):
+        return self._coord[1]
 
+    @property
+    def forward(self):
         if self._dir == 'r':
-            x += 1
+            return self.x + 1, self.y
         else:
-            y += 1
+            return self.x, self.y + 1
 
-        self._coord = (x, y)
-        return True
-
-    def back(self) -> bool:
-        """Move the car backward, returning true if the action was successful."""
-        if not self.can_back():
-            return False
-
-        (x, y) = self._coord
-
+    @property
+    def back(self):
         if self._dir == 'r':
-            x -= 1
+            return self.x - 1, self.y
         else:
-            y -= 1
-
-        self._coord = (x, y)
-        return True
+            return self.x, self.y - 1
 
     def can_forward(self) -> bool:
         return self._can_move(True)

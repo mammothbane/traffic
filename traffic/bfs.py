@@ -11,7 +11,7 @@ class BFS:
     def start(self):
         queue = deque()
 
-        cur = State(None, {}, 0)
+        cur = State(None, self._puzzle._simple_cpy(), 0)
         seen = {cur.hash()}
 
         for i in count():
