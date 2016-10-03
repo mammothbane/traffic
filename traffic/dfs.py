@@ -7,7 +7,7 @@ class DFS:
     def __init__(self, puzzle):
         self._puzzle = puzzle
 
-    def start(self, limit=None):
+    def start(self, limit=None, p=True):
         queue = []
 
         cur = State(None, self._puzzle._simple_cpy(), 0)
@@ -15,12 +15,13 @@ class DFS:
 
         for i in count():
             if i % 1000 == 0 and i > 0:
-                print(i)
+                if p:
+                    print(i)
             if self._puzzle.complete():
-                cur.report(self._puzzle)
-
-                print('solution found at depth %s. completed in %s steps\n' % (cur.depth, i))
-                return True
+                if p:
+                    cur.report(self._puzzle)
+                    print('solution found at depth %s. completed in %s steps\n' % (cur.depth, i))
+                return True, cur
 
             if cur.depth != limit:
                 for car in self._puzzle:
@@ -41,7 +42,7 @@ class DFS:
                             seen.add(hs)
 
             if len(queue) == 0:
-                return False
+                return False, None
 
             cur = queue.pop()
             self._puzzle.use_cars(cur.total_deltas)
