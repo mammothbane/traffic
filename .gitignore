@@ -95,3 +95,4 @@ ENV/
 
 *.yaml
 *.yml
+*.json

@@ -1,18 +1,18 @@
 import argparse
 
-import yaml
+import json
 
 from traffic.car import Car
 from traffic.traffic import Traffic
 
 
 parser = argparse.ArgumentParser(description='Solve the traffic problem.')
-parser.add_argument('file', metavar='FILE', help='yaml problem definition file')
+parser.add_argument('file', metavar='FILE', help='json problem definition file')
 parser.add_argument('--strategy', help='what search strategy do we use?')
 args = parser.parse_args()
 
 with open(args.file) as f:
-    content = yaml.load(f)
+    content = json.load(f)
 
 cars = []
 for elem in content['cars']:

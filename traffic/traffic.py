@@ -1,5 +1,3 @@
-import itertools
-
 class Traffic:
     """
     A representation of the whole state of the problem.
@@ -52,7 +50,7 @@ class Traffic:
             for j in range(0, self._dimens[0]):
                 car = self._car_in((j, i))
                 if car:
-                    out += str(car)
+                    out += str(car._idx)
                 else:
                     out += 'x'
             out += '\n'
