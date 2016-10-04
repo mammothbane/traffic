@@ -3,12 +3,12 @@ import itertools
 
 class Car:
     """A representation of an individual car in the traffic problem."""
-    def __init__(self, parent, idx, dir, coord, length=2, player=False):
+    def __init__(self, parent, idx, direction, coord, length=2, player=False):
         self.player = player
 
         self._parent = parent
         self._idx = idx
-        self._dir = dir.lower()
+        self._dir = direction.lower()
         self._coord = coord
         self._len = length
 

@@ -12,35 +12,33 @@ class BFS:
         queue = deque()
 
         cur = State(None, self._puzzle._simple_cpy(), 0)
-        seen = {cur.hash()}
+        skips = 0
 
         for i in count():
             if i % 1000 == 0 and i > 0:
-                print(i)
+                print('%s nodes processed (depth %s, %s skipped, %s in queue)' % (i, cur.depth, skips, len(queue)))
+
             if self._puzzle.complete():
                 cur.report(self._puzzle)
 
-                print('solution found at depth %s. completed in %s steps\n' % (cur.depth, i))
+                print('optimal solution found at depth %s. completed in %s steps\n' % (cur.depth, i))
                 break
 
             for car in self._puzzle:
                 if car.can_forward():
                     s = State(cur, self._puzzle.with_car_fwd(car.index), cur.depth + 1)
-                    hs = s.hash()
-
-                    if hs not in seen:
+                    if cur.seen(s):
+                        skips += 1
+                    else:
                         queue.append(s)
-                        seen.add(hs)
 
                 if car.can_back():
                     s = State(cur, self._puzzle.with_car_back(car.index), cur.depth + 1)
-                    hs = s.hash()
-
-                    if hs not in seen:
+                    if cur.seen(s):
+                        skips += 1
+                    else:
                         queue.append(s)
-                        seen.add(hs)
 
             cur = queue.popleft()
 
             self._puzzle.use_cars(cur.total_deltas)
-

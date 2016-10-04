@@ -8,6 +8,11 @@ class State:
         self._parent = parent
         self.depth = depth
 
+        if parent:
+            self._hashlist = parent._hashlist.union({self.hash()})
+        else:
+            self._hashlist = {self.hash()}
+
     @property
     def total_deltas(self):
         if self._checkpoint:
@@ -23,9 +28,14 @@ class State:
 
         # only store full history every few levels
         if self.depth % 5 == 0:
-            self._checkpoint = out
+            self._checkpoint = copy(out)
 
         return out
+
+    def seen(self, rep):
+        if type(rep) is State:
+            return rep.hash() in self._hashlist
+        return rep in self._hashlist
 
     def hash(self):
         return ''.join(['%s%s%s' % (k, v[0], v[1]) for k, v in sorted(self.total_deltas.items())])

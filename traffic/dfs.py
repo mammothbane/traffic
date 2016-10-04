@@ -11,7 +11,6 @@ class DFS:
         queue = []
 
         cur = State(None, self._puzzle._simple_cpy(), 0)
-        seen = {cur.hash()}
 
         for i in count():
             if i % 1000 == 0 and i > 0:
@@ -27,19 +26,13 @@ class DFS:
                 for car in self._puzzle:
                     if car.can_forward():
                         s = State(cur, {car.index: car.forward}, cur.depth + 1)
-                        hs = s.hash()
-
-                        if hs not in seen:
+                        if not cur.seen(s):
                             queue.append(s)
-                            seen.add(hs)
 
                     if car.can_back():
                         s = State(cur, {car.index: car.back}, cur.depth + 1)
-                        hs = s.hash()
-
-                        if hs not in seen:
+                        if not cur.seen(s):
                             queue.append(s)
-                            seen.add(hs)
 
             if len(queue) == 0:
                 return False, None
