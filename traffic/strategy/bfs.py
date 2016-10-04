@@ -17,6 +17,8 @@ class BFS(Strategy):
         cur = State(None, self._puzzle.simple_cpy(), 0)
         skips = 0
 
+        seen = {cur.hash()}
+
         for i in count():
             if i % 1000 == 0 and i > 0:
                 print('%s nodes processed (depth %s, %s skipped, %s in queue)' % (i, cur.depth, skips, len(queue)))
@@ -29,18 +31,20 @@ class BFS(Strategy):
 
             for car in self._puzzle:
                 if car.can_forward():
-                    s = State(cur, self._puzzle.with_car_fwd(car.index), cur.depth + 1)
-                    if cur.seen(s):
+                    s = State(cur, {car.index: car.forward}, cur.depth + 1)
+                    if s.hash() in seen:
                         skips += 1
                     else:
                         queue.append(s)
+                        seen.add(s.hash())
 
                 if car.can_back():
-                    s = State(cur, self._puzzle.with_car_back(car.index), cur.depth + 1)
-                    if cur.seen(s):
+                    s = State(cur, {car.index: car.back}, cur.depth + 1)
+                    if s.hash() in seen:
                         skips += 1
                     else:
                         queue.append(s)
+                        seen.add(s.hash())
 
             cur = queue.popleft()
 
