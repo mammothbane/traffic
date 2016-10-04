@@ -1,6 +1,15 @@
 Nathan's Traffic Solver
 ==============================
 
-My implementation runs on Python 3, and is configured with json files.
+This implementation runs on Python 3. It was written for 3.5.2, but any version 3.x should also work. There are no
+external dependencies.
 
-./main.py [problem file] is the simplest way to run it.
+To solve a specific problem, use main.py:
+
+    python main.py FILE STRATEGY
+
+where FILE is a JSON-formatted specification file and STRATEGY is one of BFS, DFS, IDS, ASTAR. To run all of the
+examples (including my 'simple' 4x4 one), test_{strategy}.py files are provided.
+
+The problem specification files follow a straightforward format, and examples are provided. 1 through 3 are the
+problems specified in the project pdf, in order.

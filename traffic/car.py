@@ -105,15 +105,6 @@ class Car:
 
         return True
 
-    @property
-    def dimens(self):
-        """Get the bounds of the car as two pairs of coordinates."""
-        (x, y) = self._coord
-        if self._dir == 'r':
-            return (x, y), (x + self._len, y)
-
-        return (x, y), (x, y + self._len)
-
     def __str__(self):
         return 'Car(idx=%s, dir=%s, coord=%s, len=%s, player=%s)' % (self._idx, self._dir, self._coord, self._len, self.player)
 
