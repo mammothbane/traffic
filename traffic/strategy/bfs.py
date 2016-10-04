@@ -14,7 +14,7 @@ class BFS(Strategy):
     def start(self):
         queue = deque()
 
-        cur = State(None, self._puzzle.simple_cpy(), 0)
+        cur = State(None, self._config.init_state, 0, self._config)
         skips = 0
 
         # this is the key to making BFS viable. we can throw out any state we've ever seen
@@ -26,13 +26,14 @@ class BFS(Strategy):
             if i % 1000 == 0 and i > 0:
                 print('%s nodes processed (depth %s, %s skipped, %s in queue)' % (i, cur.depth, skips, len(queue)))
 
-            if self._puzzle.complete():
-                cur.report(self._puzzle)
+            pz = cur.puzzle()
+            if pz.complete():
+                cur.report()
 
                 print('optimal solution found at depth %s. completed in %s steps\n' % (cur.depth, i))
                 break
 
-            for car in self._puzzle:
+            for car in pz:
                 if car.can_forward():
                     s = State(cur, {car.index: car.forward}, cur.depth + 1)
                     if s.hash() in seen:
@@ -50,5 +51,3 @@ class BFS(Strategy):
                         seen.add(s.hash())
 
             cur = queue.popleft()
-
-            self._puzzle.use_cars(cur.total_deltas)

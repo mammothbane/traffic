@@ -3,20 +3,24 @@ import itertools
 
 class Car:
     """A representation of an individual car in the traffic problem."""
-    def __init__(self, parent, idx, direction, coord, length=2, player=False):
-        self.player = player
+    def __init__(self, puzzle, index, coord=None):
+        self._puzzle = puzzle
+        self._index = index
 
-        self._parent = parent
-        self._idx = idx
-        self._dir = direction.lower()
-        self._coord = coord
-        self._len = length
+        if coord:
+            self._coord = coord
+        else:
+            self._coord = self.default_coords
 
-        assert self._dir == 'r' or self._dir == 'd'
+    def __len__(self):
+        return len(self.car_config)
+
+    def __getattr__(self, item):
+        return getattr(self.car_config, item)
 
     @property
-    def index(self):
-        return self._idx
+    def car_config(self):
+        return self._puzzle.config[self._index]
 
     @property
     def x(self):
@@ -28,14 +32,14 @@ class Car:
 
     @property
     def forward(self):
-        if self._dir == 'r':
+        if self.dir == 'r':
             return self.x + 1, self.y
         else:
             return self.x, self.y + 1
 
     @property
     def back(self):
-        if self._dir == 'r':
+        if self.dir == 'r':
             return self.x - 1, self.y
         else:
             return self.x, self.y - 1
@@ -48,17 +52,17 @@ class Car:
 
     def _can_move(self, fwd):
         x, y = (0, 1)
-        if self._dir == 'r':
+        if self.dir == 'r':
             x, y = (1, 0)
 
         if not fwd:
             x *= -1
             y *= -1
 
-        if not self.within_bounds(self._parent._dimens, (x, y)):
+        if not self.within_bounds(self._puzzle.dimens, (x, y)):
             return False
 
-        for car in self._parent:
+        for car in self._puzzle:
             if car is self:
                 continue
             if car.overlaps(self.squares((x, y))):
@@ -86,11 +90,11 @@ class Car:
         """Generate all squares within the bounds of the car."""
         x, y = (self._coord[0] + offset[0], self._coord[1] + offset[1])
 
-        if self._dir == 'r':
-            for i in range(self._len):
+        if self.dir == 'r':
+            for i in range(len(self)):
                 yield (x + i, y)
         else:
-            for i in range(self._len):
+            for i in range(len(self)):
                 yield (x, y + i)
 
     def within_bounds(self, bounds, offset=(0, 0)) -> bool:
@@ -106,8 +110,8 @@ class Car:
         return True
 
     def __str__(self):
-        return 'Car(idx=%s, dir=%s, coord=%s, len=%s, player=%s)' % (self._idx, self._dir, self._coord, self._len, self.player)
+        return 'Car(idx=%s, dir=%s, coord=%s, len=%s, player=%s)' % (self.index, self.dir, self._coord, len(self), self.player)
 
     def __repr__(self):
-        return '%s%s %s%s' % ('player ' if self.player else '', self._coord, self._dir.upper(),
-                              ' (len ' + str(self._len) + ')' if self._len != 2 else '')
+        return '%s%s %s%s' % ('player ' if self.player else '', self._coord, self.dir.upper(),
+                              ' (len ' + str(len(self)) + ')' if len(self) != 2 else '')

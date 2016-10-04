@@ -2,16 +2,26 @@ from copy import copy
 
 
 class State:
-    def __init__(self, parent, delta, depth):
+    def __init__(self, parent, delta, depth, config=None):
         self._delta = delta
         self._checkpoint = None
         self._parent = parent
         self.depth = depth
 
+        assert parent or config
+
+        self._config = config
+        if not config:
+            self._config = parent.config
+
         if parent:
             self._hashlist = parent._hashlist.union({self.hash()})
         else:
             self._hashlist = {self.hash()}
+
+    @property
+    def config(self):
+        return self._config
 
     @property
     def total_deltas(self):
@@ -43,13 +53,17 @@ class State:
         """Produce a unique hash representing the board state at this node."""
         return ''.join(['%s%s%s' % (k, v[0], v[1]) for k, v in sorted(self.total_deltas.items())])
 
-    def report(self, puzzle):
+    def puzzle(self):
+        return self.config.puzzle_for(self)
+
+    def report(self):
         """Print the list of moves required to reach this state."""
         if self._parent:
-            self._parent.report(puzzle)
+            self._parent.report()
 
-        puzzle.use_cars(self.total_deltas)
-        puzzle.print()
+        pz = self.puzzle()
+        pz.print()
+
         if self._parent and len(self._delta) == 1:
             k = list(self._delta.keys())[0]
             print('%s: %s -> %s' % (k, self._parent.total_deltas[k], self._delta[k]))
