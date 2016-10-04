@@ -55,7 +55,7 @@ class State:
         out = ''
         for i in range(self.dimens[1]):
             for j in range(self.dimens[0]):
-                car_idx = self._car_in((j, i))
+                car_idx = self.car_in((j, i))
                 if car_idx == -1:
                     out += '. '
                     continue
@@ -116,7 +116,7 @@ class State:
             print(self._delta)
         print()
 
-    def _car_in(self, coord):
+    def car_in(self, coord):
         for car in self:
             if car.overlaps([coord]):
                 return car.index

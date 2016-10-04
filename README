@@ -6,10 +6,15 @@ external dependencies.
 
 To solve a specific problem, use main.py:
 
-    python main.py FILE STRATEGY
+    python main.py FILE STRATEGY [-h HEURISTIC].
 
-where FILE is a JSON-formatted specification file and STRATEGY is one of BFS, DFS, IDS, ASTAR. To run all of the
-examples (including my 'simple' 4x4 one), test_{strategy}.py files are provided.
+where FILE is a JSON-formatted specification file, STRATEGY is one of BFS, DFS, IDS, and ASTAR, and HEURISTIC is a valid
+heuristic (listed under the traffic.heuristic package). To run all reasonable (read: terminating) examples (including
+my 'simple' 4x4 one), test_{strategy}.py files are provided.
 
 The problem specification files follow a straightforward format, and examples are provided. 1 through 3 are the
 problems specified in the project pdf, in order.
+
+To run each of the numbered examples with bfs, for example, one could run:
+
+    python main.py examples/{1, 2, 3}.json BFS
