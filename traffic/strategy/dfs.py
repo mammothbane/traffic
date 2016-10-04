@@ -1,12 +1,10 @@
 from itertools import count
 
-from .state import State
+from .strategy import Strategy
+from ..state import State
 
 
-class DFS:
-    def __init__(self, puzzle):
-        self._puzzle = puzzle
-
+class DFS(Strategy):
     def start(self, limit=None, p=True):
         queue = []
 

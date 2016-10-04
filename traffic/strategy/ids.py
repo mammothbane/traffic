@@ -1,11 +1,12 @@
 from itertools import count
 
 from .dfs import DFS
+from .strategy import Strategy
 
 
-class IDS:
+class IDS(Strategy):
     def __init__(self, puzzle):
-        self._puzzle = puzzle
+        super().__init__(puzzle)
         self._init_state = puzzle.simple_cpy()
         self._dfs = DFS(puzzle)
 

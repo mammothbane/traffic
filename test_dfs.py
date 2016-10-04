@@ -1,5 +1,5 @@
-from traffic.dfs import DFS
 from traffic.puzzle import Puzzle
+from traffic.strategy.dfs import DFS
 
 p = Puzzle('examples/simple.json')
 dfs = DFS(p)

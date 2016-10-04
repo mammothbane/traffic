@@ -1,18 +1,16 @@
 from collections import deque
 from itertools import count
 
-from .state import State
+from .strategy import Strategy
+from ..state import State
 
 
-class BFS:
+class BFS(Strategy):
     """
     A basic implementation of breadth-first search.
 
     Not suitable for puzzles with search depths greater than ~8 moves.
     """
-    def __init__(self, puzzle):
-        self._puzzle = puzzle
-
     def start(self):
         queue = deque()
 

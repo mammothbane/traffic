@@ -1,5 +1,5 @@
-from traffic.ids import IDS
 from traffic.puzzle import Puzzle
+from traffic.strategy.ids import IDS
 
 p = Puzzle('examples/simple.json')
 ids = IDS(p)
