@@ -58,11 +58,11 @@ class Puzzle:
     def __getitem__(self, item):
         return self._cars[item]
 
-    def _simple_cpy(self):
+    def simple_cpy(self):
         return {car.index: car._coord for car in self}
 
     def with_car_fwd(self, i):
-        cpy = self._simple_cpy()
+        cpy = self.simple_cpy()
         if self[i]._dir == 'r':
             cpy[i] = (cpy[i][0] + 1, cpy[i][1])
         else:
@@ -70,7 +70,7 @@ class Puzzle:
         return cpy
 
     def with_car_back(self, i):
-        cpy = self._simple_cpy()
+        cpy = self.simple_cpy()
         if self[i]._dir == 'r':
             cpy[i] = (cpy[i][0] - 1, cpy[i][1])
         else:

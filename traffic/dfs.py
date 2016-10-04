@@ -10,7 +10,7 @@ class DFS:
     def start(self, limit=None, p=True):
         queue = []
 
-        cur = State(None, self._puzzle._simple_cpy(), 0)
+        cur = State(None, self._puzzle.simple_cpy(), 0)
 
         for i in count():
             if i % 1000 == 0 and i > 0:

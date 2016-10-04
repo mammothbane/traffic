@@ -5,13 +5,18 @@ from .state import State
 
 
 class BFS:
+    """
+    A basic implementation of breadth-first search.
+
+    Not suitable for puzzles with search depths greater than ~8 moves.
+    """
     def __init__(self, puzzle):
         self._puzzle = puzzle
 
     def start(self):
         queue = deque()
 
-        cur = State(None, self._puzzle._simple_cpy(), 0)
+        cur = State(None, self._puzzle.simple_cpy(), 0)
         skips = 0
 
         for i in count():

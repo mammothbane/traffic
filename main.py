@@ -1,22 +1,22 @@
 import argparse
 
-import json
-
-from traffic.car import Car
+from traffic.bfs import BFS
+from traffic.dfs import DFS
+from traffic.ids import IDS
 from traffic.puzzle import Puzzle
 
 
-parser = argparse.ArgumentParser(description='Solve the traffic problem.')
+parser = argparse.ArgumentParser(description='Solve a traffic puzzle.')
 parser.add_argument('file', metavar='FILE', help='json problem definition file')
-parser.add_argument('--strategy', help='what search strategy do we use?')
+parser.add_argument('strategy', metavar='STRATEGY', help='search strategy to use')
 args = parser.parse_args()
 
-with open(args.file) as f:
-    content = json.load(f)
+puzzle = Puzzle(args.file)
+strategy = {
+    'bfs': BFS,
+    'ids': IDS,
+    'dfs': DFS
+}[args.strategy.lower()]
 
-cars = []
-for elem in content['cars']:
-    car = Car(elem, None, elem['dir'], (elem['x'], elem['y']), elem.get('len', 2), elem.get('player', False))
-    cars.append(car)
+strategy(puzzle).start()
 
-puzzle = Puzzle(content['exit'], cars, (content['dimens']['x'], content['dimens']['y']))

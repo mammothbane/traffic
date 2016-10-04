@@ -15,8 +15,8 @@ class State:
 
     @property
     def total_deltas(self):
-        if self._checkpoint:
-            return copy(self._checkpoint)
+        # if self._checkpoint:
+        #     return copy(self._checkpoint)
 
         if not self._parent:
             return copy(self._delta)
@@ -27,8 +27,8 @@ class State:
             out[k] = v
 
         # only store full history every few levels
-        if self.depth % 5 == 0:
-            self._checkpoint = copy(out)
+        # if self.depth % 5 == 0:
+        #     self._checkpoint = copy(out)
 
         return out
 
