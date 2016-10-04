@@ -38,6 +38,9 @@ class State:
     def __getattr__(self, item):
         return getattr(self._config, item)
 
+    def __lt__(self, other):
+        return False
+
     def complete(self):
         """Check whether we've won."""
         return (self._exit, 0) in self.player.squares()
