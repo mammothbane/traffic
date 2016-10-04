@@ -1,5 +1,7 @@
 from copy import copy
 
+from .car import Car
+
 
 class State:
     def __init__(self, parent, delta, depth, config=None):
@@ -18,6 +20,50 @@ class State:
             self._hashlist = parent._hashlist.union({self.hash()})
         else:
             self._hashlist = {self.hash()}
+
+        self.__cars = None
+
+    @property
+    def _cars(self):
+        if not self.__cars:
+            self.__cars = [Car(self, k, v) for k, v in self.total_deltas.items()]
+        return self.__cars
+
+    def __iter__(self):
+        yield from self._cars
+
+    def __getitem__(self, item):
+        return self._cars[item]
+
+    def __getattr__(self, item):
+        return getattr(self._config, item)
+
+    def complete(self):
+        """Check whether we've won."""
+        return (self._exit, 0) in self.player.squares()
+
+    @property
+    def player(self):
+        for x in self:
+            if x.player:
+                return x
+
+    def print(self):
+        out = ''
+        for i in range(self.dimens[1]):
+            for j in range(self.dimens[0]):
+                car_idx = self._car_in((j, i))
+                if car_idx == -1:
+                    out += '. '
+                    continue
+
+                if self[car_idx].player:
+                    out += 'p '
+                else:
+                    out += str(car_idx) + ' '
+            out += '\n'
+
+        print(out)
 
     @property
     def config(self):
@@ -53,16 +99,12 @@ class State:
         """Produce a unique hash representing the board state at this node."""
         return ''.join(['%s%s%s' % (k, v[0], v[1]) for k, v in sorted(self.total_deltas.items())])
 
-    def puzzle(self):
-        return self.config.puzzle_for(self)
-
     def report(self):
         """Print the list of moves required to reach this state."""
         if self._parent:
             self._parent.report()
 
-        pz = self.puzzle()
-        pz.print()
+        self.print()
 
         if self._parent and len(self._delta) == 1:
             k = list(self._delta.keys())[0]
@@ -70,3 +112,9 @@ class State:
         else:
             print(self._delta)
         print()
+
+    def _car_in(self, coord):
+        for car in self:
+            if car.overlaps([coord]):
+                return car.index
+        return -1

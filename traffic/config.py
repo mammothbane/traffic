@@ -1,8 +1,6 @@
 import json
 
 from .carconfig import CarConfig
-from .puzzle import Puzzle
-from .state import State
 
 
 class Config:
@@ -28,12 +26,6 @@ class Config:
 
     def __getitem__(self, i):
         return self._cars[i]
-
-    def puzzle_for(self, state):
-        if type(state) is State:
-            state = state.total_deltas
-
-        return Puzzle(self, state)
 
     @property
     def init_state(self):

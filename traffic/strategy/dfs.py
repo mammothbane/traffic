@@ -18,20 +18,20 @@ class DFS(Strategy):
     def start(self, limit=None, p=True):
         queue = []
 
-        cur = State(None, self._puzzle.simple_cpy(), 0)
+        cur = State(None, self._config.init_state, 0, self._config)
 
         for i in count():
             if i % 1000 == 0 and i > 0:
                 if p:
                     print(i)
-            if self._puzzle.complete():
+            if cur.complete():
                 if p:
-                    cur.report(self._puzzle)
+                    cur.report()
                     print('solution found at depth %s. completed in %s steps\n' % (cur.depth, i))
                 return True, cur
 
             if cur.depth != limit:
-                for car in self._puzzle:
+                for car in cur:
                     if car.can_forward():
                         s = State(cur, {car.index: car.forward}, cur.depth + 1)
                         if not cur.seen(s):
@@ -46,4 +46,3 @@ class DFS(Strategy):
                 return False, None
 
             cur = queue.pop()
-            self._puzzle.use_cars(cur.total_deltas)

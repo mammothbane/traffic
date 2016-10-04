@@ -26,14 +26,13 @@ class BFS(Strategy):
             if i % 1000 == 0 and i > 0:
                 print('%s nodes processed (depth %s, %s skipped, %s in queue)' % (i, cur.depth, skips, len(queue)))
 
-            pz = cur.puzzle()
-            if pz.complete():
+            if cur.complete():
                 cur.report()
 
                 print('optimal solution found at depth %s. completed in %s steps\n' % (cur.depth, i))
                 break
 
-            for car in pz:
+            for car in cur:
                 if car.can_forward():
                     s = State(cur, {car.index: car.forward}, cur.depth + 1)
                     if s.hash() in seen:
