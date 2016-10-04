@@ -1,8 +1,8 @@
 from traffic.config import Config
-from traffic.heuristic.cars_in_between import CarsInBetween
+from traffic.heuristic.car_available_moves import CarAvailableMoves
 from traffic.strategy.astar import AStar
 
-h = CarsInBetween
+h = CarAvailableMoves
 
 c = Config('examples/simple.json')
 a = AStar(c, h)

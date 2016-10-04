@@ -3,8 +3,8 @@ import itertools
 
 class Car:
     """A representation of an individual car in the traffic problem."""
-    def __init__(self, puzzle, index, coord=None):
-        self._puzzle = puzzle
+    def __init__(self, state, index, coord=None):
+        self._state = state
         self._index = index
 
         if coord:
@@ -20,7 +20,7 @@ class Car:
 
     @property
     def car_config(self):
-        return self._puzzle.config[self._index]
+        return self._state.config[self._index]
 
     @property
     def x(self):
@@ -59,10 +59,10 @@ class Car:
             x *= -1
             y *= -1
 
-        if not self.within_bounds(self._puzzle.dimens, (x, y)):
+        if not self.within_bounds(self._state.dimens, (x, y)):
             return False
 
-        for car in self._puzzle:
+        for car in self._state:
             if car is self:
                 continue
             if car.overlaps(self.squares((x, y))):
@@ -108,6 +108,16 @@ class Car:
                 return False
 
         return True
+
+    @property
+    def blocked_by(self):
+        if self.can_forward() or self.can_back():
+            return
+
+        fwd = self._state.car_in(self.forward)
+        bck = self._state.car_in(self.back)
+
+        return [x for x in [fwd, bck] if x]
 
     def __str__(self):
         return 'Car(idx=%s, dir=%s, coord=%s, len=%s, player=%s)' % (self.index, self.dir, self._coord, len(self), self.player)

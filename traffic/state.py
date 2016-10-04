@@ -55,15 +55,15 @@ class State:
         out = ''
         for i in range(self.dimens[1]):
             for j in range(self.dimens[0]):
-                car_idx = self.car_in((j, i))
-                if car_idx == -1:
+                car = self.car_in((j, i))
+                if not car:
                     out += '. '
                     continue
 
-                if self[car_idx].player:
+                if car.player:
                     out += 'p '
                 else:
-                    out += str(car_idx) + ' '
+                    out += str(car.index) + ' '
             out += '\n'
 
         print(out)
@@ -119,5 +119,4 @@ class State:
     def car_in(self, coord):
         for car in self:
             if car.overlaps([coord]):
-                return car.index
-        return -1
+                return car
