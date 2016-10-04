@@ -15,6 +15,7 @@ class State:
 
     @property
     def total_deltas(self):
+        """Compute the board state at this node."""
         if self._checkpoint:
             return copy(self._checkpoint)
 
@@ -33,14 +34,17 @@ class State:
         return out
 
     def seen(self, rep):
+        """Check whether any ancestor of this state represents the same board configuration."""
         if type(rep) is State:
             return rep.hash() in self._hashlist
         return rep in self._hashlist
 
     def hash(self):
+        """Produce a unique hash representing the board state at this node."""
         return ''.join(['%s%s%s' % (k, v[0], v[1]) for k, v in sorted(self.total_deltas.items())])
 
     def report(self, puzzle):
+        """Print the list of moves required to reach this state."""
         if self._parent:
             self._parent.report(puzzle)
 

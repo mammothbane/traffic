@@ -70,7 +70,7 @@ class Car:
         """
         Check whether this car overlaps any of the squares in other.
 
-        :arg other: an iterable of (x, y) coordinate tuples
+        :arg other: an iterable of (x, y) coordinate tuples, or a Car
         """
         itr = other
         if type(other) is Car:

@@ -5,6 +5,16 @@ from ..state import State
 
 
 class DFS(Strategy):
+    """
+    A basic DFS implementation.
+
+    Not very smart or fast, but it does technically work, and avoids searching
+    an infinite-depth tree by checking to see if we've seen a state before.
+
+    Can handle the 4x4 example, but would take a very long time to exhaust all possible
+    moves on any of the others.
+    """
+
     def start(self, limit=None, p=True):
         queue = []
 

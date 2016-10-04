@@ -17,6 +17,9 @@ class BFS(Strategy):
         cur = State(None, self._puzzle.simple_cpy(), 0)
         skips = 0
 
+        # this is the key to making BFS viable. we can throw out any state we've ever seen
+        # before, because the depth at which we saw it is necessarily less than or equal to
+        # the current depth (meaning that there exists a better or equal-length path to it).
         seen = {cur.hash()}
 
         for i in count():

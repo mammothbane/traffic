@@ -5,7 +5,7 @@ from .car import Car
 
 class Puzzle:
     """
-    A representation of the whole state of the problem.
+    A representation of the whole puzzle.
 
     Consists primarily of a list of cars.
     """
@@ -21,10 +21,8 @@ class Puzzle:
                 car._parent = self
                 car._idx = idx
 
-        players = [x for x in self if x.player]
-        assert len(players) == 1
-
-        assert players[0]._coord[0] == self._exit
+        assert len([x for x in self if x.player]) == 1
+        assert self.player.x == self._exit
 
         self.check()
 
@@ -59,23 +57,7 @@ class Puzzle:
         return self._cars[item]
 
     def simple_cpy(self):
-        return {car.index: car._coord for car in self}
-
-    def with_car_fwd(self, i):
-        cpy = self.simple_cpy()
-        if self[i]._dir == 'r':
-            cpy[i] = (cpy[i][0] + 1, cpy[i][1])
-        else:
-            cpy[i] = (cpy[i][0], cpy[i][1] + 1)
-        return cpy
-
-    def with_car_back(self, i):
-        cpy = self.simple_cpy()
-        if self[i]._dir == 'r':
-            cpy[i] = (cpy[i][0] - 1, cpy[i][1])
-        else:
-            cpy[i] = (cpy[i][0], cpy[i][1] - 1)
-        return cpy
+        return {car.index: (car.x, car.y) for car in self}
 
     def use_cars(self, cars):
         for i, cp in cars.items():
@@ -90,7 +72,8 @@ class Puzzle:
             assert car.within_bounds(self._dimens)
             assert not any([car.overlaps(other) for other in self if other is not car])
 
-    def complete(self) -> bool:
+    def complete(self):
+        """Check whether we've won."""
         return (self._exit, 0) in self.player.squares()
 
     def _car_in(self, coord):
@@ -99,7 +82,7 @@ class Puzzle:
                 return i
         return -1
 
-    def print(self) -> str:
+    def print(self):
         out = ''
         for i in range(self._dimens[1]):
             for j in range(self._dimens[0]):
