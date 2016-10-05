@@ -8,7 +8,7 @@ class AvailableMovesExtended(Heuristic):
     required to put them in a non-blocked state.
 
     Note: this heuristic is not included in the analysis because it has a bug somewhere that I didn't
-    want to take the time to root out. It was performing worse than AvailableMoves, when it should dominate
+    want to take the time to root out. It was performing worse than CarAvailableMoves, when it should dominate
     it. I expect the problem lies in the logic for avoiding repetition.
     """
 
