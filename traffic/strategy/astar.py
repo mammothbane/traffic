@@ -14,6 +14,7 @@ class AStar(Strategy):
         queue = PriorityQueue()
 
         cur = State(None, self._config.init_state, 0, self._config)
+        seen = {cur.hash(): 0}
 
         for i in count():
             if i % 1000 == 0 and i > 0:
@@ -23,25 +24,26 @@ class AStar(Strategy):
                 print('optimal solution found at depth %s. completed in %s steps\n' % (cur.depth, i))
                 return True, cur
 
-            updated = False
             if cur.depth != limit:
                 for car in cur:
                     if car.can_forward():
                         s = State(cur, {car.index: car.forward}, cur.depth + 1)
-                        if not cur.seen(s):
+                        hs = s.hash()
+
+                        if hs not in seen or cur.depth < seen[hs]:
                             queue.put((s.depth + self._h.estimate(s), s))
-                            updated = True
+                            seen[hs] = cur.depth
 
                     if car.can_back():
                         s = State(cur, {car.index: car.back}, cur.depth + 1)
-                        if not cur.seen(s):
+                        hs = s.hash()
+
+                        if hs not in seen or cur.depth < seen[hs]:
                             queue.put((s.depth + self._h.estimate(s), s))
-                            updated = True
+                            seen[hs] = cur.depth
 
             if queue.empty():
                 return False, None
 
-            prio, nxt = queue.get_nowait()
-            # if not updated:
-            #     print('reached terminus at depth %s, backing off to next candidate at %s (prio %s)' % (cur.depth, nxt.depth, prio))
+            prio, nxt = queue.get()
             cur = nxt
