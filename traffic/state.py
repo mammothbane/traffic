@@ -16,11 +16,6 @@ class State:
         if not config:
             self._config = parent.config
 
-        if parent:
-            self._hashlist = parent._hashlist.union({self.hash()})
-        else:
-            self._hashlist = {self.hash()}
-
         self.__cars = None
 
     @property
@@ -91,12 +86,6 @@ class State:
             self._checkpoint = copy(out)
 
         return out
-
-    def seen(self, rep):
-        """Check whether any ancestor of this state represents the same board configuration."""
-        if type(rep) is State:
-            return rep.hash() in self._hashlist
-        return rep in self._hashlist
 
     def hash(self):
         """Produce a unique hash representing the board state at this node."""
