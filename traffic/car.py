@@ -111,6 +111,11 @@ class Car:
 
     @property
     def blocked_by(self):
+        """
+        If this car can't move in any direction, return a list (len <= 2) of cars
+        directly preventing it from doing so.
+        """
+
         if self.can_forward() or self.can_back():
             return
 

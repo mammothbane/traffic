@@ -1,3 +1,4 @@
+from .available_moves_extended import AvailableMovesExtended
 from .car_available_moves import CarAvailableMoves
 from .cars_in_between import CarsInBetween
 from .manhattan import Manhattan
@@ -8,4 +9,5 @@ heuristics = {
     'manhattan': Manhattan,
     'max': Max,
     'car_available_moves': CarAvailableMoves,
+    'available_moves_extended': AvailableMovesExtended,
 }
